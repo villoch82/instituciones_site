@@ -1,0 +1,13 @@
+<html lang="en">
+  <head>
+    <title>Crear Institucióon</title>
+  </head>
+  <body>
+    <form action={% url "crear" %} method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Submit">
+        </form>
+   </form>
+  </body>
+</html>
