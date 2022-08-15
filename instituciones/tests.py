@@ -12,7 +12,7 @@ class TestCrearInstitucion(TestCase):
         self.url = reverse("crear")
 
     def test_crear_institucion(self):
-        #Creación de una institución
+        #Creación de una institución correcta
 
         datos_entrada = {
             "nombre" : "Nombre",
@@ -26,3 +26,16 @@ class TestCrearInstitucion(TestCase):
         self.assertContains(response, '12345678A')
         self.assertContains(response, '2020-10-10 00:00:00')
         self.assertContains(response, 'Dirección Válida')
+
+    def test_crear_institucion_nif_incorrecto(self):
+        #Creación de una institución NIF incorrecto
+
+        datos_entrada = {
+            "nombre" : "Nombre",
+            "direccion" : "Dirección Válida",
+            "fecha_creacion" : "2020-10-10 00:00:00",
+            "nif" : "1234567AA",
+        }
+
+        response = self.client.post(self.url, datos_entrada)
+        self.assertContains(response, 'No es un formato NIF válido')
