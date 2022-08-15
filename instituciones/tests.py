@@ -11,7 +11,7 @@ class TestCrearInstitucion(TestCase):
         self.client = Client()
         self.url = reverse("crear")
 
-    def test_crear_institucion(self):
+    def test_save_institucion(self):
         #Creación de una institución correcta
 
         datos_entrada = {
@@ -27,7 +27,7 @@ class TestCrearInstitucion(TestCase):
         self.assertContains(response, '2020-10-10 00:00:00')
         self.assertContains(response, 'Dirección Válida')
 
-    def test_crear_institucion_nif_incorrecto(self):
+    def test_save_institucion_nif_incorrecto(self):
         #Creación de una institución NIF incorrecto
 
         datos_entrada = {
