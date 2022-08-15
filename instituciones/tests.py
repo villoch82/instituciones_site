@@ -3,7 +3,7 @@ from django.test import TestCase, Client
 
 # Create your tests here.
 
-class TestCrearInstitucion(TestCase):
+class TestSaveInstitucion(TestCase):
     #Clase para verificar la creaciín de una institución
 
     def setUp(self):
@@ -15,6 +15,7 @@ class TestCrearInstitucion(TestCase):
         #Creación de una institución correcta
 
         datos_entrada = {
+            "id" : "",
             "nombre" : "Nombre",
             "direccion" : "Dirección Válida",
             "fecha_creacion" : "2020-10-10 00:00:00",
@@ -31,6 +32,7 @@ class TestCrearInstitucion(TestCase):
         #Creación de una institución NIF incorrecto
 
         datos_entrada = {
+            "id" : "",
             "nombre" : "Nombre",
             "direccion" : "Dirección Válida",
             "fecha_creacion" : "2020-10-10 00:00:00",
