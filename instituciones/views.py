@@ -26,6 +26,7 @@ def Listar(request):
     )
 
 def Save(request):
+    #variables para el contexto
     id = ''
     action = 'CREAR'
     usuario_actual = request.user
@@ -33,16 +34,22 @@ def Save(request):
     if request.POST: # Se verfica que se va a almacenar los datos
         form = CrearInstitucionForm(request.POST)
 
-        if form.is_valid():
+        if form.is_valid(): # Verificadas las validaciones
 
+            #Si vienen con el dato de llave primaria, se trata de una moificación, 
+            # de lo contrario se crea unobjeto nuevo vacío
             if request.POST['id'] == '':
                 institucion = Instituciones()
                 
+            
+            #Se obtien el objeto del registro a modificar 
+            #Se agregan al contexto de la plantilla, el id y un str con la acción de modificar
             else:
                 institucion = Instituciones.objects.get(id = request.POST['id'])
                 id = request.POST['id']
                 action = 'ACTUALIZAR'
 
+            #se puebla el objeto con los datos recibidos en el request, y se salvan a bd
             institucion.nombre = request.POST['nombre']
             institucion.direccion = request.POST['direccion']
             institucion.fecha_creacion = request.POST['fecha_creacion']
@@ -54,6 +61,7 @@ def Save(request):
 
     elif request.GET:# Se verfica que se trata de una modificación
             
+            #obtener los datos del objeto a modificar
             institucion = Instituciones.objects.get(id = request.GET['id'])
             
             data = {
@@ -64,12 +72,14 @@ def Save(request):
                 'creado_por' : institucion.creado_por,
             }
 
+            #crear el fomrulario con los datos obtenidos para que sean renderizados en la plantilla
             form = CrearInstitucionForm(data)
             id = request.GET['id']
             action = 'ACTUALIZAR'
 
     else:
 
+        #si la petición no trae consigo POST o GET se puebla un form vacio
         form = CrearInstitucionForm()
 
     return render(
@@ -82,8 +92,11 @@ def Save(request):
             }
         )
 
+#método borrar institucion
 def Borrar(request):
+
     if request.GET:
+        #si se recibe por método GET el id y confirmado se procede a borrar el registro de la bd
         if 'id' and 'confirmado' in request.GET:
             try:
                 Instituciones.objects.filter(id = request.GET['id']).delete()
@@ -91,6 +104,8 @@ def Borrar(request):
                 return redirect('instituciones:listado')
             except ValueError:
                 messages.error(request, 'hubo un error al eliminar la institución')
+
+        #si solo se recibe el id, se visualiza la confirmación de la operación de borrado
         elif request.GET['id']:
             return render(
                 request,
