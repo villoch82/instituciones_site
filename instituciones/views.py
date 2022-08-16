@@ -10,6 +10,16 @@ from instituciones.forms import CrearInstitucionForm, RegistraUsuarioForm
 from instituciones.models import Instituciones
 
 # Create your views here.
+def Listar(request):
+    listado = Instituciones.objects.all()
+    return render(
+        request,
+        'listado.html',
+        context = {
+            'listado' : listado,
+        }
+    )
+
 def Save(request):
     id = ''
     action = 'CREAR'
@@ -33,6 +43,7 @@ def Save(request):
             institucion.nif = request.POST['nif']
 
             institucion.save()
+            messages.info(request, 'Datos almacenados correctamente')
 
     elif request.GET:
             
@@ -62,6 +73,26 @@ def Save(request):
             'action' : action,
             }
         )
+
+def Borrar(request):
+    if request.GET:
+        if 'id' and 'confirmado' in request.GET:
+            try:
+                Instituciones.objects.filter(id = request.GET['id']).delete()
+                messages.info(request, 'Institucion eliminada')
+                return redirect('instituciones:listado')
+            except ValueError:
+                messages.error(request, 'hubo un error al eliminar la institución')
+        elif request.GET['id']:
+            return render(
+                request,
+                'eliminar.html',
+                context = {
+                    'id' : request.GET['id'],
+                }
+            )
+
+
 
 def regitrarUsuario(request):
     if request.method == "POST":
@@ -104,3 +135,4 @@ def loginUsuario(request):
 def logoutUsuario(request):
     logout(request)
     messages.info(request, 'Ha cerrado la sessión')
+    return redirect('instituciones:loginUsuario')

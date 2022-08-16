@@ -1,11 +1,23 @@
+{% extends 'base.html' %}
+
 {% block content %} 
+
+<div class="row">
+  <div class="col-sm-6 pull-right">
+      <div class="pull-right">
+          <p>
+            <a href="{% url "instituciones:listado" %}" class="btn btn-primary" role="button">Listado de instituciones</a>
+          </p>
+      </div>
+  </div>
+</div>
 
 <html lang="en">
   <head>
     <title>Institucióon | {{action}}</title>
   </head>
   <body>
-    <form action={% url "crear" %} method="post">
+    <form action={% url "instituciones:crear" %} method="post">
         {% csrf_token %}
         {{ form }}
         <input type="submit" value="Submit">

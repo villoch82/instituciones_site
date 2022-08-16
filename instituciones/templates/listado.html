@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+  <div class="row">
+    <div class="col-sm-6 pull-right">
+        <div class="pull-right">
+            <p>
+              <a href="crear" class="btn btn-primary" role="button">Nueva institución</a>
+            </p>
+        </div>
+    </div>
+  </div>
+
+   <table class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th><a href="?order_by=name">Nombre</a></th>
+          <th><a href="?order_by=phone">Dirección</a></th>
+          <th><a href="?order_by=birthdate">Fecha de creación</a></th>
+          <th><a href="?order_by=contact_type__type">NIF</a></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for institucion in listado %}
+        <tr>
+          <td>{{institucion.nombre}}</td>
+          <td>{{institucion.direccion}}</td>
+          <td>{{institucion.fecha_creacion}}</td>
+          <td>{{institucion.nif}}</td>
+          <td width="80px">
+            <i class="bi bi-pencil-fill"></i>
+              <a href="crear?id={{institucion.id}}" class="btn btn-success btn-block" role="button"> Edit </a>
+          </td>
+          <td width="80px">
+              <a href="eliminar?id={{institucion.id}}" class="btn btn-danger btn-block" role="button"> Eliminar </a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td>
+            No hay instituciones para mostrar
+          </td>
+        </tr>
+        {% endfor %}
+        
+        
+      </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalCenterTitle">Delete contact</h5>
+          </div>
+          <div class="modal-body">
+            Are you sure?
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+              <form method="POST" class="delete_confirm_modal_form">
+                {%csrf_token%}
+                <input class="btn btn-danger" type="submit" value="Delete">
+            </form>
+          </div>
+      </div>
+  </div>
+</div>
+
+{% endblock %}

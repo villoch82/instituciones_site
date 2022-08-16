@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %} 
+
+<div class="row">
+    ¿Está seguro que desea eliminar esta institución?
+</div>
+<div class="row">
+            <a href="eliminar?id={{id}}&confirmado" class="btn btn-danger " role="button"> Sí </a>
+            <a href="{% url "instituciones:listado" %}" class="btn btn-primary" role="button"> No </a>
+
+</div>
+
+{% endblock %}

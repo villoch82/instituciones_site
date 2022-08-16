@@ -22,7 +22,7 @@
         {% if user.is_authenticated %}
         
         <li class="nav-item">
-          <a class="nav-link" href="/logout">Cerrar sessión</a>
+          <a class="nav-link" href="logout">Cerrar sessión</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Usuario activo: {{user.username}}</a>
@@ -31,7 +31,7 @@
         {% else %}
   
         <li class="nav-item">
-          <a class="nav-link" href="/login">Iniciar sessión</a>
+          <a class="nav-link" href="login">Iniciar sessión</a>
         </li>
   
         {% endif %}
@@ -39,9 +39,19 @@
     </div>
   </nav>
 
+  {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+    <div class="container">
     {% block content %}
 
     {% endblock %} 
+    </div>
       
   </body>
 </html>
