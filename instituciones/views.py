@@ -30,7 +30,7 @@ def Save(request):
     action = 'CREAR'
     usuario_actual = request.user
 
-    if request.POST:
+    if request.POST: # Se verfica que se va a almacenar los datos
         form = CrearInstitucionForm(request.POST)
 
         if form.is_valid():
@@ -52,7 +52,7 @@ def Save(request):
             institucion.save()
             messages.info(request, 'Datos almacenados correctamente')
 
-    elif request.GET:
+    elif request.GET:# Se verfica que se trata de una modificación
             
             institucion = Instituciones.objects.get(id = request.GET['id'])
             
@@ -61,7 +61,7 @@ def Save(request):
                 'direccion' : institucion.direccion,
                 'fecha_creacion' : institucion.fecha_creacion,
                 'nif' : institucion.nif,
-                'creado_por' : current_user.id
+                'creado_por' : institucion.creado_por,
             }
 
             form = CrearInstitucionForm(data)
