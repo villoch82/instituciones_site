@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 
 #Regex 
@@ -12,6 +13,8 @@ class Instituciones(models.Model):
     direccion = models.CharField(max_length= 100, verbose_name='Dirección')
     fecha_creacion = models.DateTimeField()
     nif = models.CharField(validators=[NIF_REGEX], max_length=9, verbose_name='NIF')
+    creado_por = models.ForeignKey(User, on_delete= models.CASCADE, related_name='instituciones_usuario', verbose_name='Creador')
+
 
     def __str__(self):
         return self.nombre

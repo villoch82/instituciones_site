@@ -11,7 +11,12 @@ from instituciones.models import Instituciones
 
 # Create your views here.
 def Listar(request):
-    listado = Instituciones.objects.all()
+    usuario_actual = request.user
+    if not request.user.is_authenticated:
+        messages.info(request, 'No se permite el acceso anónimo')
+        return redirect('instituciones:loginUsuario')
+
+    listado = Instituciones.objects.all().filter(creado_por = usuario_actual)
     return render(
         request,
         'listado.html',
@@ -23,6 +28,7 @@ def Listar(request):
 def Save(request):
     id = ''
     action = 'CREAR'
+    usuario_actual = request.user
 
     if request.POST:
         form = CrearInstitucionForm(request.POST)
@@ -41,6 +47,7 @@ def Save(request):
             institucion.direccion = request.POST['direccion']
             institucion.fecha_creacion = request.POST['fecha_creacion']
             institucion.nif = request.POST['nif']
+            institucion.creado_por = usuario_actual
 
             institucion.save()
             messages.info(request, 'Datos almacenados correctamente')
@@ -53,7 +60,8 @@ def Save(request):
                 'nombre' : institucion.nombre,
                 'direccion' : institucion.direccion,
                 'fecha_creacion' : institucion.fecha_creacion,
-                'nif' : institucion.nif
+                'nif' : institucion.nif,
+                'creado_por' : current_user.id
             }
 
             form = CrearInstitucionForm(data)
@@ -101,7 +109,7 @@ def regitrarUsuario(request):
             user = form.save()
             login(request, user)
             messages.success(request, "Usuario registrado" )
-            return redirect("main:homepage")
+            return redirect('instituciones:login')
         messages.error(request, "Error al registrar nuevo usuario, revise los datos suministrados")
     form = RegistraUsuarioForm()
     return render(
@@ -119,6 +127,7 @@ def loginUsuario(request):
             if user is not None:
                 login(request, user)
                 messages.info(request, 'Sesión inisciada como ' + username)
+                return redirect('instituciones:listado')
             else:
                 messages.error(request, 'Usuario y/o contraseña inválido')
         else:
